@@ -30,12 +30,13 @@ var app = (function() {
 
     function rollDie(x) {
         var i, randNum;
-
+		
+		faces[x].classList.add("animated");
         randNum = getRndInteger(1,6);
         for (i = 0; i < randNum; i++) {
             pip = document.createElement("span");
             pip.classList.add("pip");
-            faces[x].appendChild(pip);
+			faces[x].appendChild(pip);
         }
     }
 
@@ -54,6 +55,7 @@ var app = (function() {
 
         for (var i = 0; i < faces.length; i++) {
             faces[i].addEventListener("click", rollDice.bind(this, 6), false);
+			faces[i].addEventListener("animationend", function() { this.classList.remove("animated"); }, false);
         }
     }
 
