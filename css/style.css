@@ -23,6 +23,18 @@ DICE
 -------------------------------------------------------------------
 */
 
+#dices {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+
 .face {
 	display: grid;
 	grid-template-areas:
@@ -31,10 +43,10 @@ DICE
 		"d . b";
 
 	flex: 0 0 auto;
-	margin: 33vmin;
+	margin: 6vmin;
 	padding: 2vmin;
-	width: 30vmin;
-	height: 30vmin;
+	width: 25vmin;
+	height: 25vmin;
 
 	background-color: #ddd;
 	border-radius: 10%;
