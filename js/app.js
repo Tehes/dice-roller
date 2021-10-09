@@ -39,18 +39,22 @@ var app = (function() {
         }
     }
 
-    function rollDice(x) {
+    function rollDice(num) {
         var i;
 
-        for (i = 0; i < x; i++) {
+        resetDice();
+        for (i = 0; i < num; i++) {
             rollDie(i);
         }
     }
 
     function init() {
         document.addEventListener("touchstart", function() {}, false);
-        resetDice();
         rollDice(6); // no. of dice - max is 6
+
+        for (var i = 0; i < faces.length; i++) {
+            faces[i].addEventListener("click", rollDice.bind(this, 6), false);
+        }
     }
 
     /* --------------------------------------------------------------------------------------------------
