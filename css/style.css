@@ -57,6 +57,10 @@ DICE
     box-shadow: 0.5vmin 0.4vmin #ccc;
 }
 
+.face:empty {
+    display: none;
+}
+
 .pip {
 	display: block;
 	align-self: center;
