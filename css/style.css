@@ -19,6 +19,13 @@ body {
     margin:0;padding:0;
 }
 
+header {
+    position: absolute;
+    z-index: 2000;
+    top: 30px;
+    left: 30px;
+}
+
 
 
 /*
@@ -143,6 +150,71 @@ DICE
   }
 }
 
+/*
+-------------------------------------------------------------------
+HAMBURGER-ICON
+-------------------------------------------------------------------
+*/
+
+label.hamburger {
+   display: block;
+   width: 75px;
+   height: 50px;
+   position: relative;
+   border-radius: 4px;
+}
+
+input#hamburger {display:none}
+
+.line {
+   position: absolute;
+   left:10px;
+   height: 4px; width: 55px;
+   background: #fff; border-radius: 2px;
+   display: block;
+   transition: 0.5s;
+   transform-origin: center;
+}
+
+.line:nth-child(1) { top: 12px; }
+.line:nth-child(2) { top: 24px; }
+.line:nth-child(3) { top: 36px; }
+
+#hamburger:checked + .hamburger .line:nth-child(1){
+   transform: translateY(12px) rotate(-45deg);
+}
+
+#hamburger:checked + .hamburger .line:nth-child(2){
+   opacity:0;
+}
+
+#hamburger:checked + .hamburger .line:nth-child(3){
+   transform: translateY(-12px) rotate(45deg);
+}
+
+/*
+-------------------------------------------------------------------
+SIDE NAVIGATION
+-------------------------------------------------------------------
+*/
+
+nav {
+  height: 100%; /* 100% Full-height */
+  width: 0; /* 0 width - change this with JavaScript */
+  position: fixed; /* Stay in place */
+  z-index: 1000; /* Stay on top */
+  top: 0; /* Stay at the top */
+  left: 0;
+  background-color: #666; /* Black*/
+  opacity: 0.9;
+  overflow-x: hidden; /* Disable horizontal scroll */
+  padding-top: 90px; /* Place content 60px from the top */
+  transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+}
+
+.open {
+    width: 30vw;
+}
 
 /*
 -------------------------------------------------------------------

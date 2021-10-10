@@ -15,7 +15,9 @@ var app = (function() {
     Variables
     ---------------------------------------------------------------------------------------------------*/
     var faces = document.querySelectorAll(".face");
-    var NoOfDice = getRndInteger(1,6);
+    var noOfDice = getRndInteger(1,6);
+    var hamburgerIcon = document.querySelector("#hamburger");
+    var sidebar = document.querySelector("nav");
 
 
     /* --------------------------------------------------------------------------------------------------
@@ -56,13 +58,19 @@ var app = (function() {
         }
     }
 
+    /* Set the width of the side navigation to 250px */
+    function toggleNav() {
+        sidebar.classList.toggle("open");
+    }
+
     function init() {
         document.addEventListener("touchstart", function() {}, false);
-        rollDice(NoOfDice); // no. of dice - max is 6
+        rollDice(noOfDice); // no. of dice - max is 6
 
+        hamburgerIcon.addEventListener("click", toggleNav, false);
         for (var i = 0; i < faces.length; i++) {
             faces[i].addEventListener("click", shakeDice, false);
-			faces[i].addEventListener("animationend", rollDice.bind(this, NoOfDice), false);
+			faces[i].addEventListener("animationend", rollDice.bind(this, noOfDice), false);
         }
     }
 
