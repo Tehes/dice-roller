@@ -15,6 +15,7 @@ var app = (function() {
     Variables
     ---------------------------------------------------------------------------------------------------*/
     var faces = document.querySelectorAll(".face");
+    var NoOfDice = getRndInteger(1,6);
 
 
     /* --------------------------------------------------------------------------------------------------
@@ -30,13 +31,13 @@ var app = (function() {
 
     function rollDie(x) {
         var i, randNum;
-		
-		faces[x].classList.add("animated");
+
         randNum = getRndInteger(1,6);
         for (i = 0; i < randNum; i++) {
             pip = document.createElement("span");
             pip.classList.add("pip");
 			faces[x].appendChild(pip);
+            faces[x].classList.remove("animated");
         }
     }
 
@@ -49,13 +50,19 @@ var app = (function() {
         }
     }
 
+    function shakeDice() {
+        for (var i = 0; i < faces.length; i++) {
+            faces[i].classList.add("animated");
+        }
+    }
+
     function init() {
         document.addEventListener("touchstart", function() {}, false);
-        rollDice(6); // no. of dice - max is 6
+        rollDice(NoOfDice); // no. of dice - max is 6
 
         for (var i = 0; i < faces.length; i++) {
-            faces[i].addEventListener("click", rollDice.bind(this, 6), false);
-			faces[i].addEventListener("animationend", function() { this.classList.remove("animated"); }, false);
+            faces[i].addEventListener("click", shakeDice, false);
+			faces[i].addEventListener("animationend", rollDice.bind(this, NoOfDice), false);
         }
     }
 
