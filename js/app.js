@@ -18,6 +18,8 @@ var app = (function() {
     var noOfDice = getRndInteger(1,6);
     var hamburgerIcon = document.querySelector("#hamburger");
     var sidebar = document.querySelector("nav");
+    var slider = document.querySelector("#slider");
+    slider.value = noOfDice;
 
 
     /* --------------------------------------------------------------------------------------------------
@@ -43,11 +45,11 @@ var app = (function() {
         }
     }
 
-    function rollDice(num) {
+    function rollDice() {
         var i;
 
         resetDice();
-        for (i = 0; i < num; i++) {
+        for (i = 0; i < noOfDice; i++) {
             rollDie(i);
         }
     }
@@ -63,14 +65,21 @@ var app = (function() {
         sidebar.classList.toggle("open");
     }
 
+    function setnoOfDice() {
+        noOfDice = event.target.value;
+        rollDice();
+    }
+
     function init() {
         document.addEventListener("touchstart", function() {}, false);
         rollDice(noOfDice); // no. of dice - max is 6
 
         hamburgerIcon.addEventListener("click", toggleNav, false);
+        slider.addEventListener("input", setnoOfDice, false);
+
         for (var i = 0; i < faces.length; i++) {
             faces[i].addEventListener("click", shakeDice, false);
-			faces[i].addEventListener("animationend", rollDice.bind(this, noOfDice), false);
+			faces[i].addEventListener("animationend", rollDice, false);
         }
     }
 
