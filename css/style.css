@@ -80,6 +80,16 @@ DICE
 	background-color: #333;
 }
 
+.digit {
+	display: block;
+	grid-area: g;
+	font-size: 18vmin;
+	line-height: 18vmin;
+	font-weight: 400;
+	color: #000;
+	text-align: center;
+}
+
 .pip:nth-child(2) {
 	grid-area: b;
 }
@@ -239,6 +249,7 @@ h1 {
 
 h2 {
     font-size: 1.2em;
+	padding-top: 15px;
 }
 
 input[type=range] {
@@ -270,6 +281,21 @@ input[type=range]::-moz-range-thumb {
     border-radius: 16px;
     border: 2px solid #ccc;
     cursor: pointer;
+}
+
+select {
+	width: 100%;
+	height: 32px;
+	-webkit-appearance: none;
+    appearance: none;
+	border: none;
+	padding-left: 10px;
+	font-size: 1.3em;
+	border-radius: 4px;
+	background: #ccc;
+	outline: none;
+	color: #333;
+	cursor: pointer;
 }
 
 /*

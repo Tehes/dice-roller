@@ -20,6 +20,9 @@ var app = (function() {
     var sidebar = document.querySelector("nav");
     var slider = document.querySelector("#slider");
     slider.value = noOfDice;
+	var sides = document.querySelector("select");
+	var maxSides = 6;
+	sides.value = maxSides;
 
 
     /* --------------------------------------------------------------------------------------------------
@@ -34,15 +37,25 @@ var app = (function() {
     }
 
     function rollDie(x) {
-        var i, randNum;
+        var i, randNum, pip, digit;
 
-        randNum = getRndInteger(1,6);
-        for (i = 0; i < randNum; i++) {
+        randNum = getRndInteger(1,maxSides);
+		
+		if (maxSides === 6) {
+			for (i = 0; i < randNum; i++) {
             pip = document.createElement("span");
             pip.classList.add("pip");
 			faces[x].appendChild(pip);
             faces[x].classList.remove("animated");
-        }
+        	}
+		}
+		else {
+			digit = document.createElement("span");
+            digit.classList.add("digit");
+			digit.textContent = randNum;
+			faces[x].appendChild(digit);
+            faces[x].classList.remove("animated");
+		}
     }
 
     function rollDice() {
@@ -65,8 +78,9 @@ var app = (function() {
         sidebar.classList.toggle("open");
     }
 
-    function setnoOfDice() {
-        noOfDice = event.target.value;
+    function setOptions() {
+        noOfDice = slider.value;
+		maxSides = parseInt(sides.value);
         rollDice();
     }
 
@@ -75,7 +89,8 @@ var app = (function() {
         rollDice(noOfDice); // no. of dice - max is 6
 
         hamburgerIcon.addEventListener("click", toggleNav, false);
-        slider.addEventListener("input", setnoOfDice, false);
+        slider.addEventListener("input", setOptions, false);	
+		sides.addEventListener("change", setOptions, false);
 
         for (var i = 0; i < faces.length; i++) {
             faces[i].addEventListener("click", shakeDice, false);
