@@ -17,7 +17,8 @@ body {
     -webkit-user-select: none;
     -webkit-touch-callout: none;
     margin:0;padding:0;
-    font-family: 'Roboto', sans-serif;
+    /*font-family: 'Roboto', sans-serif;*/
+	font-family: 'Rubik', sans-serif;
     color: #fff;
 }
 
@@ -82,9 +83,11 @@ DICE
 
 .digit {
 	display: block;
+	justify-self: center;
+	align-self: center;
 	grid-area: g;
-	font-size: 18vmin;
-	line-height: 18vmin;
+	font-size: 15vmin;
+	line-height: 15vmin;
 	font-weight: 400;
 	color: #000;
 	text-align: center;
