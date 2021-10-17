@@ -1,5 +1,9 @@
 :root {
   --main-bg-color: #ddd;
+  --dice-color: #fff;
+  --pips-color: #333;
+  --shadow-color: #ccc;
+  --nav-bg-color: #666;
 }
 
 * {
@@ -62,9 +66,9 @@ DICE
 	width: 25vmin;
 	height: 25vmin;
 
-	background-color: #fff;
+	background-color: var(--dice-color);
 	border-radius: 10%;
-    box-shadow: 0.5vmin 0.4vmin #ccc;
+    box-shadow: 0.5vmin 0.4vmin var(--shadow-color);
 }
 
 .face:empty {
@@ -78,7 +82,7 @@ DICE
 	width: 80%;
 	height: 80%;
 	border-radius: 50%;
-	background-color: #333;
+	background-color: var(--pips-color);
 }
 
 .digit {
@@ -89,7 +93,7 @@ DICE
 	font-size: 15vmin;
 	line-height: 15vmin;
 	font-weight: 400;
-	color: #333;
+	color: var(--pips-color);
 	text-align: center;
 }
 
@@ -228,7 +232,7 @@ nav {
   z-index: 1000; /* Stay on top */
   top: 0; /* Stay at the top */
   left: 0;
-  background-color: #666; /* Black*/
+  background-color: var(--nav-bg-color); /* Black*/
   opacity: 0.95;
   overflow-x: hidden; /* Disable horizontal scroll */
   padding-top: 90px; /* Place content 60px from the top */
@@ -320,3 +324,13 @@ footer a:hover, footer a:active {
 MEDIA QUERIES
 -------------------------------------------------------------------
 */
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--main-bg-color: #111;
+		--dice-color: #999;
+		--pips-color: #eee;
+		--shadow-color: #666;
+		--nav-bg-color: #333;
+	}
+}
