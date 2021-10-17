@@ -301,6 +301,20 @@ select {
 	cursor: pointer;
 }
 
+footer {
+	position: absolute;
+	bottom: 30px;
+}
+
+footer a:link, footer a:visited {
+  color: #fff;
+  font-size: 1em;
+}
+
+footer a:hover, footer a:active {
+	color: #ddd;
+}
+
 /*
 -------------------------------------------------------------------
 MEDIA QUERIES
