@@ -10,7 +10,7 @@ A simple dice roller web application that allows you to roll one or more dice wi
 - Sidebar menu to control settings
 
 ## Usage
-1.	Open the application in your web browser.
+1.	[Open the application in your web browser](https://tehes.github.io/dice-roller/).
 2.	Use the slider to select the number of dice.
 3.	Choose the number of sides for the dice from the dropdown.
 4.	Click on the dice to roll them. The dice will animate and display the result.
