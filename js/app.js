@@ -26,7 +26,7 @@ let maxSides = 6; // Default number of sides is 6
 sides.value = maxSides;
 let pressTimer; // Timer to detect long press
 let pressStartTime; // Variable to store the start time of mousedown
-const longPressThreshold = 1000; // Threshold to define long press
+const longPressThreshold = 500; // Threshold to define long press
 // Detect if the device supports touch inputs
 // 'ontouchstart' checks for touch events, and maxTouchPoints checks for the number of touch points
 const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints;
