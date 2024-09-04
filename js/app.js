@@ -27,6 +27,9 @@ sides.value = maxSides;
 let pressTimer; // Timer to detect long press
 let pressStartTime; // Variable to store the start time of mousedown
 const longPressThreshold = 1000; // Threshold to define long press
+// Detect if the device supports touch inputs
+// 'ontouchstart' checks for touch events, and maxTouchPoints checks for the number of touch points
+const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints;
 
 /* --------------------------------------------------------------------------------------------------
 functions
@@ -93,9 +96,11 @@ function stopShakeDice() {
 // Locks/unlocks dice on long press
 function lockDice(ev) {
     const die = ev.currentTarget;
+
     pressStartTime = Date.now(); // Record the time when mousedown starts
 
     pressTimer = window.setTimeout(function () {
+        ev.preventDefault(); // Prevent context menus or text selection
         die.classList.toggle("locked"); // Toggle locked status on long press
     }, longPressThreshold); // Long press time threshold
 }
@@ -134,11 +139,22 @@ function init() {
 
     // Set up event listeners for each dice face
     diceFaces.forEach(function (face) {
-        face.addEventListener("mousedown", lockDice, false); // Detect long press on mousedown
-        face.addEventListener("mouseup", cancelLongPress, false); // Cancel long press on mouseup
+        if (isTouchDevice) {
+            face.addEventListener("touchstart", lockDice, false); // Start lock on long press (mobile)
+            face.addEventListener("touchend", cancelLongPress, false); // Cancel lock on touchend (mobile)
+            face.addEventListener("touchcancel", cancelLongPress, false); // Cancel lock if touch event is interrupted
+        }
+        else {
+            face.addEventListener("mousedown", lockDice, false); // Detect long press on mousedown
+            face.addEventListener("mouseup", cancelLongPress, false); // Cancel long press on mouseup
+        }
         face.addEventListener("click", startShakeDice, false); // Start shake animation on click
         face.addEventListener("animationstart", startRoll, false); // Start rolling the die when the animation starts
         face.addEventListener("animationend", stopShakeDice, false); // Stop the shake animation when it ends
+        // Prevent default context menu on right-click or long press
+        face.addEventListener("contextmenu", function (ev) {
+            ev.preventDefault(); // Disable context menu on right-click or long press
+        }, false);
     });
 }
 
