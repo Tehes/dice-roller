@@ -16,23 +16,25 @@ Variables
 ---------------------------------------------------------------------------------------------------*/
 // Select all elements representing the faces of the dice
 const diceFaces = document.querySelectorAll(".face");
-let numberOfDice = getRndInteger(1, 6);
+let numberOfDice = getRndInteger(1, 6); // Initialize number of dice randomly
 const menuButton = document.querySelector("#hamburger");
 const sidebar = document.querySelector("nav");
 const slider = document.querySelector("#slider");
 slider.value = numberOfDice;
 const sides = document.querySelector("select");
-let maxSides = 6;
+let maxSides = 6; // Default number of sides is 6
 sides.value = maxSides;
-
+let pressTimer; // Timer to detect long press
+let pressStartTime; // Variable to store the start time of mousedown
+const longPressThreshold = 1000; // Threshold to define long press
 
 /* --------------------------------------------------------------------------------------------------
 functions
 ---------------------------------------------------------------------------------------------------*/
-// Renders the dice faces based on the number of dice and the number of sides
+// Clears and renders dice faces based on the number of dice and the number of sides
 function renderDice() {
-    diceFaces.forEach(function(face) {
-        face.empty(); // Clear the face element
+    diceFaces.forEach(function (face) {
+        face.empty(); // Clear the face content
     });
 
     for (let i = 0; i < numberOfDice; i++) {
@@ -61,17 +63,24 @@ function renderPips(die) {
     }
 }
 
-// Starts the dice roll animation and calls renderPips after a delay
+// Rolls the dice after a short delay and renders the new pips
 function startRoll(ev) {
-    const die = ev.target || ev;
+    const die = ev.currentTarget || ev;
     window.setTimeout(renderPips.bind(null, die), 350);
 }
 
 // Starts the shake animation for the dice
 function startShakeDice() {
-    diceFaces.forEach(function (face) {
-        face.classList.add("animated");
-    });
+    const pressDuration = Date.now() - pressStartTime;
+
+    // Only trigger dice roll if the press was short
+    if (pressDuration < longPressThreshold) {
+        diceFaces.forEach(function (face) {
+            if (!face.classList.contains("locked")) { // Only animate unlocked dice
+                face.classList.add("animated");
+            }
+        });
+    }
 }
 
 // Stops the shake animation for the dice
@@ -79,6 +88,26 @@ function stopShakeDice() {
     diceFaces.forEach(function (face) {
         face.classList.remove("animated");
     });
+}
+
+// Locks/unlocks dice on long press
+function lockDice(ev) {
+    const die = ev.currentTarget;
+    pressStartTime = Date.now(); // Record the time when mousedown starts
+
+    pressTimer = window.setTimeout(function () {
+        die.classList.toggle("locked"); // Toggle locked status on long press
+    }, longPressThreshold); // Long press time threshold
+}
+
+// Cancels the long press if mouseup happens before threshold
+function cancelLongPress(ev) {
+    clearTimeout(pressTimer);
+
+    const pressDuration = Date.now() - pressStartTime;
+    if (pressDuration >= longPressThreshold) {
+        ev.stopImmediatePropagation(); // Stop the click event if long press was triggered
+    }
 }
 
 // Toggles the visibility of the sidebar
@@ -93,7 +122,7 @@ function setOptions() {
     renderDice();
 }
 
-// Initializes the application, setting up event listeners and rendering the initial state of the dice
+// Initializes the application, sets up event listeners and renders the initial dice state
 function init() {
     document.addEventListener("touchstart", function () { }, false);
     renderDice(); // Render the dice based on initial settings
@@ -105,6 +134,8 @@ function init() {
 
     // Set up event listeners for each dice face
     diceFaces.forEach(function (face) {
+        face.addEventListener("mousedown", lockDice, false); // Detect long press on mousedown
+        face.addEventListener("mouseup", cancelLongPress, false); // Cancel long press on mouseup
         face.addEventListener("click", startShakeDice, false); // Start shake animation on click
         face.addEventListener("animationstart", startRoll, false); // Start rolling the die when the animation starts
         face.addEventListener("animationend", stopShakeDice, false); // Stop the shake animation when it ends
