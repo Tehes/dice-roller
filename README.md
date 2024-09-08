@@ -19,3 +19,7 @@ A simple dice roller web application that allows you to roll one or more dice wi
 4. Use the **hamburger menu** to toggle the sidebar with additional settings.
 5. Use the **slider** to select the number of dice.
 6. Choose the **number of sides** for the dice from the dropdown.
+
+## Offline Support
+
+The app is a Progressive Web App (PWA), meaning you can use it offline after the initial load. The service worker caches important files, so you can roll and lock dice anytime, anywhere.
