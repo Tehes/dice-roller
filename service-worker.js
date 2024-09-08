@@ -32,6 +32,9 @@ function fetchEvent(event) {
     if (event.request.method !== 'GET') {
       return; // Ignore non-GET requests like POST, PUT, DELETE, etc.
     }
+
+    // Log which URLs are being fetched
+    // console.log('Fetching:', event.request.url);
   
     event.respondWith(
       caches.match(event.request).then(function(cachedResponse) {
