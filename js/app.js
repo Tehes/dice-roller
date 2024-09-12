@@ -29,7 +29,7 @@ let pressStartTime; // Variable to store the start time of mousedown
 const longPressThreshold = 500; // Threshold to define long press
 // Detect if the device supports touch inputs
 // 'ontouchstart' checks for touch events, and maxTouchPoints checks for the number of touch points
-const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints;
+const isTouchDevice = "ontouchstart" in window || navigator.maxTouchPoints;
 
 /* --------------------------------------------------------------------------------------------------
 functions
@@ -161,12 +161,12 @@ function init() {
 init();
 
 // Service Worker registration
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function() {
-        navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
-            console.log('Service Worker registered with scope:', registration.scope);
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function() {
+        navigator.serviceWorker.register("/service-worker.js").then(function(registration) {
+            console.log("Service Worker registered with scope:", registration.scope);
         }).catch(function(error) {
-            console.log('Service Worker registration failed:', error);
+            console.log("Service Worker registration failed:", error);
         });
     });
 }
