@@ -163,7 +163,7 @@ init();
 /* --------------------------------------------------------------------------------------------------
 Service Worker configuration. Toggle 'useServiceWorker' to enable or disable the Service Worker.
 ---------------------------------------------------------------------------------------------------*/
-const useServiceWorker = false; // Set to "true" if you want to register the Service Worker, "false" to unregister
+const useServiceWorker = true; // Set to "true" if you want to register the Service Worker, "false" to unregister
 
 const currentPath = window.location.pathname;
 if ("serviceWorker" in navigator) {
