@@ -26,7 +26,8 @@ let maxSides = 6; // Default number of sides is 6
 sides.value = maxSides;
 let pressTimer; // Timer to detect long press
 let pressStartTime; // Variable to store the start time of mousedown
-const longPressThreshold = 500; // Threshold to define long press
+const totalDisplay = document.querySelector("#total"); // Element that shows the sum of all dice
+let longPressThreshold = 500; // Threshold to define long press
 // Detect if the device supports touch inputs
 // 'ontouchstart' checks for touch events, and maxTouchPoints checks for the number of touch points
 const isTouchDevice = "ontouchstart" in window || navigator.maxTouchPoints;
@@ -34,21 +35,42 @@ const isTouchDevice = "ontouchstart" in window || navigator.maxTouchPoints;
 /* --------------------------------------------------------------------------------------------------
 functions
 ---------------------------------------------------------------------------------------------------*/
+// Calculates the sum of all dice values and updates the UI
+function computeTotal() {
+    let sum = 0;
+    diceFaces.forEach(function (face) {
+        const value = parseInt(face.dataset.value);
+        if (!isNaN(value)) {
+            sum += value;
+        }
+    });
+    if (totalDisplay) {
+        totalDisplay.textContent = sum;
+    }
+}
+
 // Clears and renders dice faces based on the number of dice and the number of sides
 function renderDice() {
+    // Clear all dice faces and remove any previously stored values
     diceFaces.forEach(function (face) {
-        face.empty(); // Clear the face content
+        face.empty();                   // Remove children
+        delete face.dataset.value;      // Remove old rolled value
     });
 
+    // Render the required number of dice
     for (let i = 0; i < numberOfDice; i++) {
-        renderPips(diceFaces[i]); // Add pips or digits to the dice faces
+        renderPips(diceFaces[i]);       // Add pips or digits and update totals
     }
+
+    // Ensure the total is correct in case numberOfDice was reduced to 0
+    computeTotal();
 }
 
 // Generates and renders the pips (or digit) for a die
 function renderPips(die) {
     die.empty(); // Clear the face element
     const randNum = getRndInteger(1, maxSides);
+    die.dataset.value = randNum; // Store rolled value for later summing
 
     if (maxSides === 6) {
         // Create the pips for a traditional 6-sided die
@@ -64,6 +86,7 @@ function renderPips(die) {
         digit.textContent = randNum;
         die.appendChild(digit);
     }
+    computeTotal(); // Update the total after this die has been rolled
 }
 
 // Rolls the dice after a short delay and renders the new pips

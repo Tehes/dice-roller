@@ -206,6 +206,20 @@ DICE
   }
 }
 
+.total-display {
+  position: fixed;
+  top: 32px;
+  right: 30px;
+
+  color: var(--neutral-white);
+
+  font-size: 2rem;
+}
+
+.total-display::before {
+  content: "Σ ";
+}
+
 /*
 -------------------------------------------------------------------
 HAMBURGER-ICON
