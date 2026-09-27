@@ -1,3 +1,5 @@
+import { initServiceWorker } from "./service-worker-registration.js";
+
 /* -------------------- Helper functions -------------------- */
 // Removes all child elements from an HTMLElement
 HTMLElement.prototype.empty = function () {
@@ -27,10 +29,14 @@ sides.value = maxSides;
 let pressTimer; // Timer to detect long press
 let pressStartTime; // Variable to store the start time of mousedown
 const totalDisplay = document.querySelector("#total"); // Element that shows the sum of all dice
-let longPressThreshold = 500; // Threshold to define long press
+const longPressThreshold = 500; // Threshold to define long press
 // Detect if the device supports touch inputs
 // 'ontouchstart' checks for touch events, and maxTouchPoints checks for the number of touch points
 const isTouchDevice = "ontouchstart" in window || navigator.maxTouchPoints;
+
+const USE_SERVICE_WORKER = true;
+const SERVICE_WORKER_VERSION = "2026-09-27-v3";
+const AUTO_RELOAD_ON_SW_UPDATE = true; // reload page once after an update
 
 /* --------------------------------------------------------------------------------------------------
 functions
@@ -92,7 +98,7 @@ function renderPips(die) {
 // Rolls the dice after a short delay and renders the new pips
 function startRoll(ev) {
     const die = ev.currentTarget || ev;
-    window.setTimeout(renderPips.bind(null, die), 350);
+    globalThis.setTimeout(renderPips.bind(null, die), 350);
 }
 
 // Starts the shake animation for the dice
@@ -122,7 +128,7 @@ function lockDice(ev) {
 
     pressStartTime = Date.now(); // Record the time when mousedown starts
 
-    pressTimer = window.setTimeout(function () {
+    pressTimer = globalThis.setTimeout(function () {
         ev.preventDefault(); // Prevent context menus or text selection
         die.classList.toggle("locked"); // Toggle locked status on long press
     }, longPressThreshold); // Long press time threshold
@@ -179,36 +185,19 @@ function init() {
             ev.preventDefault(); // Disable context menu on right-click or long press
         }, false);
     });
-}
 
-init();
-
-/* --------------------------------------------------------------------------------------------------
-Service Worker configuration. Toggle 'useServiceWorker' to enable or disable the Service Worker.
----------------------------------------------------------------------------------------------------*/
-const useServiceWorker = true; // Set to "true" if you want to register the Service Worker, "false" to unregister
-
-const currentPath = window.location.pathname;
-if ("serviceWorker" in navigator) {
-    window.addEventListener("load", function () {
-        if (useServiceWorker) {
-            // Register the Service Worker
-            navigator.serviceWorker.register(`${currentPath}service-worker.js`).then(function (registration) {
-                console.log("Service Worker registered with scope:", registration.scope);
-            }).catch(function (error) {
-                console.log("Service Worker registration failed:", error);
-            });
-        } else {
-            // Unregister all Service Workers
-            navigator.serviceWorker.getRegistrations().then(function (registrations) {
-                for (let registration of registrations) {
-                    registration.unregister().then(function (success) {
-                        if (success) {
-                            console.log("Service Worker successfully unregistered.");
-                        }
-                    });
-                }
-            });
-        }
+    initServiceWorker({
+        useServiceWorker: USE_SERVICE_WORKER,
+        serviceWorkerVersion: SERVICE_WORKER_VERSION,
+        autoReloadOnSwUpdate: AUTO_RELOAD_ON_SW_UPDATE,
     });
 }
+
+/* --------------------------------------------------------------------------------------------------
+public members, exposed with return statement
+---------------------------------------------------------------------------------------------------*/
+globalThis.app = {
+	init,
+};
+
+globalThis.app.init();

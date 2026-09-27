@@ -23,3 +23,17 @@ A simple dice roller web application that allows you to roll one or more dice wi
 ## Offline Support
 
 The app is a Progressive Web App (PWA), meaning you can use it offline after the initial load. The service worker caches important files, so you can roll and lock dice anytime, anywhere.
+
+## License and usage
+
+This project is source-available, not open source.
+
+You may view and modify the code for personal, educational, and non-commercial purposes.
+
+If you publicly redistribute this project or a modified version of it, you must:
+
+- link to the original project repository
+- include a visible attribution to the original project and author, where technically and contextually appropriate
+- clearly mark your version as modified and unofficial
+
+Commercial use, paid hosting, resale, and misleading rebranding are not allowed without prior written permission.
