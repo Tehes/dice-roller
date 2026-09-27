@@ -19,7 +19,7 @@ function getProjectInfo() {
 		projectScope = `${url.origin}/${first}/`;
 		projectSlug = first;
 	} else {
-		// Example: http://127.0.0.1:5500/ or https://example.com/
+		// Example: http://127.0.0.1:5500/ or https://nba-spielplan.de/
 		projectScope = `${url.origin}/`;
 		projectSlug = hostname.replace(/[^\w-]/g, "_").toLowerCase();
 	}

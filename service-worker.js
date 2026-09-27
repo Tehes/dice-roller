@@ -33,23 +33,11 @@ const ALLOWED_ORIGINS = new Set([
 	self.location.origin,
 	"https://fonts.googleapis.com",
 	"https://fonts.gstatic.com",
+	// add more if needed
 ]);
 
-// Adjust these paths for each project; a missing file prevents installation.
-const APP_SHELL = [
-	"./",
-	"./index.html",
-	"./css/style.css",
-	"./js/app.js",
-	"./js/service-worker-registration.js",
-].map((path) => new URL(path, self.registration.scope).href);
-
-self.addEventListener("install", (event) => {
-	event.waitUntil(
-		caches.open(CACHE_NAME)
-			.then((cache) => cache.addAll(APP_SHELL))
-			.then(() => self.skipWaiting()),
-	);
+self.addEventListener("install", () => {
+	self.skipWaiting();
 });
 
 self.addEventListener("message", (event) => {
@@ -58,11 +46,9 @@ self.addEventListener("message", (event) => {
 	}
 });
 
-// Use fresh app files online and cached copies when offline.
+// Example: cache-first / stale-while-revalidate for GET requests
 self.addEventListener("fetch", (event) => {
-	if (event.request.method !== "GET") {
-		return;
-	}
+	if (event.request.method !== "GET") return;
 
 	const requestUrl = new URL(event.request.url);
 
@@ -74,29 +60,25 @@ self.addEventListener("fetch", (event) => {
 		caches.open(CACHE_NAME).then(async (cache) => {
 			const cached = await cache.match(event.request);
 
-			if (requestUrl.origin !== self.location.origin && cached) {
-				return cached;
-			}
-
-			try {
-				const response = await fetch(event.request);
-
-				if (response.ok || response.type === "opaque") {
-					try {
-						await cache.put(event.request, response.clone());
-					} catch (error) {
-						console.warn("Service Worker cache write failed:", error);
+			const fetchPromise = fetch(event.request)
+				.then((networkResponse) => {
+					if (!networkResponse) {
+						return networkResponse;
 					}
-				}
 
-				return response;
-			} catch (error) {
-				if (cached) {
-					return cached;
-				}
+					const isOk = networkResponse.ok;
+					const isOpaque = networkResponse.type === "opaque";
 
-				throw error;
-			}
+					// Cache normal 200 OK responses and opaque cross origin responses (e.g. Google Fonts)
+					if (isOk || isOpaque) {
+						cache.put(event.request, networkResponse.clone());
+					}
+
+					return networkResponse;
+				})
+				.catch(() => cached || Promise.reject());
+
+			return cached || fetchPromise;
 		}),
 	);
 });
@@ -122,5 +104,5 @@ self.addEventListener("activate", (event) => {
 				)
 			),
 	);
-	event.waitUntil(self.clients.claim());
+	self.clients.claim();
 });
