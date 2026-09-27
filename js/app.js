@@ -53,7 +53,7 @@ const longPressThreshold = 500; // Threshold to define long press
 const isTouchDevice = "ontouchstart" in window || navigator.maxTouchPoints;
 
 const USE_SERVICE_WORKER = true;
-const SERVICE_WORKER_VERSION = "2026-09-27-v4";
+const SERVICE_WORKER_VERSION = "2026-09-27-v5";
 const AUTO_RELOAD_ON_SW_UPDATE = true; // reload page once after an update
 
 /* --------------------------------------------------------------------------------------------------
@@ -168,8 +168,15 @@ function startShakeDice() {
 
     // Only trigger dice roll if the press was short
     if (pressDuration < longPressThreshold) {
-        diceFaces.forEach(function (face) {
-            if (!face.classList.contains("locked")) { // Only animate unlocked dice
+        const delays = [40, 80, 120, 160, 200, 240];
+        for (let i = delays.length - 1; i > 0; i--) {
+            const j = getRndInteger(0, i);
+            [delays[i], delays[j]] = [delays[j], delays[i]];
+        }
+
+        diceFaces.forEach(function (face, index) {
+            if (index < numberOfDice && !face.classList.contains("locked") && !face.classList.contains("animated")) {
+                face.style.setProperty("--shake-delay", `${delays[index]}ms`);
                 face.classList.add("animated");
             }
         });
@@ -177,10 +184,8 @@ function startShakeDice() {
 }
 
 // Stops the shake animation for the dice
-function stopShakeDice() {
-    diceFaces.forEach(function (face) {
-        face.classList.remove("animated");
-    });
+function stopShakeDice(ev) {
+    ev.currentTarget.classList.remove("animated");
 }
 
 // Locks/unlocks dice on long press
