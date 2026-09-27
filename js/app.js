@@ -19,6 +19,9 @@ Variables
 // Select all elements representing the faces of the dice
 const diceFaces = document.querySelectorAll(".face");
 let numberOfDice = getRndInteger(1, 6); // Initialize number of dice randomly
+let previousNumberOfDice = numberOfDice;
+let activeMode = "";
+const diceContainer = document.querySelector("#dices");
 const menuButton = document.querySelector("#hamburger");
 const sidebar = document.querySelector("nav");
 const slider = document.querySelector("#slider");
@@ -28,21 +31,67 @@ let maxSides = 6; // Default number of sides is 6
 sides.value = maxSides;
 let pressTimer; // Timer to detect long press
 let pressStartTime; // Variable to store the start time of mousedown
-const totalDisplay = document.querySelector("#total"); // Element that shows the sum of all dice
+const standardResult = document.querySelector("#standardResult"); // Element that shows the sum of standard dice
+const modeResults = document.querySelectorAll(".mode-results");
+const tokyoResults = document.querySelector("#tokyoResults");
+const tokyoPoints = document.querySelector("#tokyoPoints");
+const tokyoHearts = document.querySelector("#tokyoHearts");
+const tokyoEnergy = document.querySelector("#tokyoEnergy");
+const tokyoPaws = document.querySelector("#tokyoPaws");
+const diceModes = {
+    tokyo: {
+        defaultDice: 6,
+        faces: ["1", "2", "3", "favorite", "bolt", "pets"],
+        summary: tokyoResults,
+        renderFace: renderTokyoFace,
+        updateSummary: updateTokyoSummary,
+    },
+};
 const longPressThreshold = 500; // Threshold to define long press
 // Detect if the device supports touch inputs
 // 'ontouchstart' checks for touch events, and maxTouchPoints checks for the number of touch points
 const isTouchDevice = "ontouchstart" in window || navigator.maxTouchPoints;
 
 const USE_SERVICE_WORKER = true;
-const SERVICE_WORKER_VERSION = "2026-09-27-v3";
+const SERVICE_WORKER_VERSION = "2026-09-27-v4";
 const AUTO_RELOAD_ON_SW_UPDATE = true; // reload page once after an update
 
 /* --------------------------------------------------------------------------------------------------
 functions
 ---------------------------------------------------------------------------------------------------*/
-// Calculates the sum of all dice values and updates the UI
+function updateTokyoSummary() {
+    const counts = { 1: 0, 2: 0, 3: 0, favorite: 0, bolt: 0, pets: 0 };
+    diceFaces.forEach((face) => {
+        if (face.dataset.value !== undefined) {
+            counts[face.dataset.value]++;
+        }
+    });
+
+    let points = 0;
+    for (let value = 1; value <= 3; value++) {
+        if (counts[value] >= 3) {
+            points += value + counts[value] - 3;
+        }
+    }
+
+    tokyoPoints.textContent = points;
+    tokyoHearts.textContent = counts.favorite;
+    tokyoEnergy.textContent = counts.bolt;
+    tokyoPaws.textContent = counts.pets;
+}
+
+// Updates the result display for the selected dice type
 function computeTotal() {
+    const mode = diceModes[sides.value];
+    standardResult.hidden = Boolean(mode);
+    modeResults.forEach((results) => {
+        results.hidden = !mode || results !== mode.summary;
+    });
+    if (mode) {
+        mode.updateSummary();
+        return;
+    }
+
     let sum = 0;
     diceFaces.forEach(function (face) {
         const value = parseInt(face.dataset.value);
@@ -50,9 +99,7 @@ function computeTotal() {
             sum += value;
         }
     });
-    if (totalDisplay) {
-        totalDisplay.textContent = sum;
-    }
+    standardResult.textContent = sum;
 }
 
 // Clears and renders dice faces based on the number of dice and the number of sides
@@ -72,13 +119,27 @@ function renderDice() {
     computeTotal();
 }
 
+function renderTokyoFace(die, value) {
+    const result = document.createElement("span");
+    const isNumber = value === "1" || value === "2" || value === "3";
+    result.classList.add(isNumber ? "digit" : "material-symbols-outlined");
+    if (!isNumber) {
+        result.classList.add("symbol");
+    }
+    result.textContent = value;
+    die.appendChild(result);
+}
+
 // Generates and renders the pips (or digit) for a die
 function renderPips(die) {
     die.empty(); // Clear the face element
+    const mode = diceModes[sides.value];
     const randNum = getRndInteger(1, maxSides);
-    die.dataset.value = randNum; // Store rolled value for later summing
+    die.dataset.value = mode ? mode.faces[randNum - 1] : randNum;
 
-    if (maxSides === 6) {
+    if (mode) {
+        mode.renderFace(die, die.dataset.value);
+    } else if (maxSides === 6) {
         // Create the pips for a traditional 6-sided die
         for (let i = 0; i < randNum; i++) {
             const pip = document.createElement("span");
@@ -151,8 +212,25 @@ function toggleSidebar() {
 
 // Updates the number of dice and the number of sides, then re-renders the dice
 function setOptions() {
-    numberOfDice = slider.value;
-    maxSides = parseInt(sides.value);
+    const modeKey = diceModes[sides.value] ? sides.value : "";
+    const mode = diceModes[modeKey];
+    const modeChanged = activeMode !== modeKey;
+    if (modeChanged) {
+        if (!activeMode && mode) {
+            previousNumberOfDice = Number(slider.value);
+        }
+        slider.value = mode ? mode.defaultDice : previousNumberOfDice;
+        if (activeMode) {
+            diceContainer.classList.remove(activeMode);
+        }
+        if (modeKey) {
+            diceContainer.classList.add(modeKey);
+        }
+        activeMode = modeKey;
+        diceFaces.forEach((face) => face.classList.remove("locked"));
+    }
+    numberOfDice = Number(slider.value);
+    maxSides = mode ? mode.faces.length : Number(sides.value);
     renderDice();
 }
 

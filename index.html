@@ -14,10 +14,11 @@
 	<link rel="apple-touch-icon" href="icons/180x180.png" />
 	<link rel="shortcut icon" href="icons/favicon.png">
 	<link rel="manifest" href="manifest.json">
-	<link rel="stylesheet" href="css/style.css">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+	<link rel="stylesheet" href="css/style.css">
 	<script defer src="https://cloud.umami.is/script.js"
 		data-website-id="2392a451-203c-4d8a-a4f5-bd7d06f832af"></script>
 </head>
@@ -36,14 +37,15 @@
 			<h1>Options</h1>
 			<h2>Number of dice</h2>
 			<input id="slider" type="range" min="1" max="6" value="1">
-			<h2>Number of sides</h2>
+			<h2>Dice type</h2>
 			<select name="sides" id="sides">
-				<option value="4">4</option>
-				<option value="6">6</option>
-				<option value="8">8</option>
-				<option value="10">10</option>
-				<option value="12">12</option>
-				<option value="20">20</option>
+				<option value="4">D4</option>
+				<option value="6">D6</option>
+				<option value="8">D8</option>
+				<option value="10">D10</option>
+				<option value="12">D12</option>
+				<option value="20">D20</option>
+				<option value="tokyo">King of Tokyo</option>
 			</select>
 			<p>Tip: Long press on a die to lock it.</p>
 			<footer>
@@ -89,7 +91,15 @@
 			<span class="pip"></span>
 		</div>
 	</div>
-	<div id="total" class="total-display">0</div>
+	<div id="total" class="total-display">
+		<span id="standardResult">0</span>
+		<span id="tokyoResults" class="mode-results" hidden>
+			<span><span class="material-symbols-outlined">star</span><span id="tokyoPoints">0</span></span>
+			<span><span class="material-symbols-outlined">favorite</span><span id="tokyoHearts">0</span></span>
+			<span><span class="material-symbols-outlined">bolt</span><span id="tokyoEnergy">0</span></span>
+			<span><span class="material-symbols-outlined">pets</span><span id="tokyoPaws">0</span></span>
+		</span>
+	</div>
 	<script type="module" src="js/app.js"></script>
 </body>
 
