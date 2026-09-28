@@ -53,7 +53,7 @@ const longPressThreshold = 500; // Threshold to define long press
 const isTouchDevice = "ontouchstart" in window || navigator.maxTouchPoints;
 
 const USE_SERVICE_WORKER = true;
-const SERVICE_WORKER_VERSION = "2026-09-28-v1";
+const SERVICE_WORKER_VERSION = "2026-09-28-v2";
 const AUTO_RELOAD_ON_SW_UPDATE = true; // reload page once after an update
 
 /* --------------------------------------------------------------------------------------------------
@@ -117,6 +117,18 @@ function renderDice() {
 
     // Ensure the total is correct in case numberOfDice was reduced to 0
     computeTotal();
+}
+
+async function loadSymbolFont() {
+    try {
+        const fonts = await document.fonts.load("400 24px \"Material Symbols Outlined\"");
+        if (fonts.length === 0) {
+            throw new Error("Material Symbols Outlined is not available.");
+        }
+        document.documentElement.classList.add("symbols-ready");
+    } catch (error) {
+        console.warn("Symbol font could not be loaded:", error);
+    }
 }
 
 function renderTokyoFace(die, value) {
@@ -241,6 +253,7 @@ function setOptions() {
 
 // Initializes the application, sets up event listeners and renders the initial dice state
 function init() {
+    loadSymbolFont();
     document.addEventListener("touchstart", function () { }, false);
     renderDice(); // Render the dice based on initial settings
 

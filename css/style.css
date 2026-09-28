@@ -49,13 +49,19 @@ DICE
 */
 
 #dices {
-	--dice-size: 25vmin;
+	--header-height: 100px;
 	--dice-gap: 12vmin;
 	--dice-columns: 2;
+	--dice-rows: 1;
+	--dice-size: min(
+		25vmin,
+		calc(100vw * 2 / var(--dice-columns) - var(--dice-gap)),
+		calc((100vh - var(--header-height)) / var(--dice-rows) - var(--dice-gap))
+	);
 	width: 100vw;
 	height: 100vh;
 	margin: 0;
-	padding: 0;
+	padding: var(--header-height) 0 0;
 	display: grid;
 	/* Each die spans two tracks so incomplete rows can be centered. */
 	grid-template-columns: repeat(var(--dice-columns), calc((var(--dice-size) + var(--dice-gap)) / 2));
@@ -71,6 +77,7 @@ DICE
 
 #dices:has(> .face:nth-child(3):not(:empty)) {
 	--dice-columns: 4;
+	--dice-rows: 2;
 }
 
 #dices:has(> .face:nth-child(3):not(:empty)):has(> .face:nth-child(4):empty) > .face:nth-child(3) {
@@ -79,12 +86,10 @@ DICE
 
 #dices:has(> .face:nth-child(4):not(:empty)) {
 	--dice-columns: 4;
-	--dice-size: 25vmin;
 }
 
 #dices:has(> .face:nth-child(5):not(:empty)) {
 	--dice-columns: 6;
-	--dice-size: min(25vmin, calc(100vw / 3 - var(--dice-gap)));
 }
 
 #dices:has(> .face:nth-child(5):not(:empty)):has(> .face:nth-child(6):empty) > .face:nth-child(4) {
@@ -230,6 +235,10 @@ DICE TYPE
 	text-align: center;
 }
 
+html:not(.symbols-ready) .material-symbols-outlined {
+	visibility: hidden;
+}
+
 .symbol {
 	grid-area: g;
 	align-self: center;
@@ -334,6 +343,7 @@ SIDE NAVIGATION
 */
 
 nav {
+	visibility: hidden;
 	height: 100%;
 	/* 100% Full-height */
 	width: 0;
@@ -355,11 +365,13 @@ nav {
 	/* 0.5 second transition effect to slide in the sidenav */
 	white-space: nowrap;
 	backdrop-filter: blur(25px);
-	border-right: 1px solid rgba(255, 255, 255, 0.1);
+	border-right: 0 solid rgba(255, 255, 255, 0.1);
 }
 
 .open {
+	visibility: visible;
 	width: 320px;
+	border-right-width: 1px;
 }
 
 nav section {
@@ -459,7 +471,7 @@ MEDIA QUERIES
 @media (max-aspect-ratio: 1/1) {
 	#dices:has(> .face:nth-child(6):not(:empty)) {
 		--dice-columns: 4;
-		--dice-size: min(25vmin, calc(100vh / 3 - var(--dice-gap)));
+		--dice-rows: 3;
 	}
 }
 
@@ -467,6 +479,7 @@ MEDIA QUERIES
 @media (min-aspect-ratio: 111/100) {
 	#dices:has(> .face:nth-child(3):not(:empty)):has(> .face:nth-child(4):empty) {
 		--dice-columns: 6;
+		--dice-rows: 1;
 	}
 
 	#dices:has(> .face:nth-child(3):not(:empty)):has(> .face:nth-child(4):empty) > .face:nth-child(3) {
@@ -477,13 +490,14 @@ MEDIA QUERIES
 @media (min-aspect-ratio: 37/25) {
 	#dices:has(> .face:nth-child(4):not(:empty)):has(> .face:nth-child(5):empty) {
 		--dice-columns: 8;
+		--dice-rows: 1;
 	}
 }
 
 @media (min-aspect-ratio: 37/20) {
 	#dices:has(> .face:nth-child(5):not(:empty)):has(> .face:nth-child(6):empty) {
 		--dice-columns: 10;
-		--dice-size: 25vmin;
+		--dice-rows: 1;
 	}
 
 	#dices:has(> .face:nth-child(5):not(:empty)):has(> .face:nth-child(6):empty) > .face:nth-child(4) {
@@ -494,7 +508,7 @@ MEDIA QUERIES
 @media (min-aspect-ratio: 111/50) {
 	#dices:has(> .face:nth-child(6):not(:empty)) {
 		--dice-columns: 12;
-		--dice-size: 25vmin;
+		--dice-rows: 1;
 	}
 }
 
