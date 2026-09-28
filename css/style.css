@@ -49,15 +49,46 @@ DICE
 */
 
 #dices {
+	--dice-size: 25vmin;
+	--dice-gap: 12vmin;
+	--dice-columns: 2;
 	width: 100vw;
 	height: 100vh;
 	margin: 0;
 	padding: 0;
-	display: flex;
-	flex-wrap: wrap;
+	display: grid;
+	/* Each die spans two tracks so incomplete rows can be centered. */
+	grid-template-columns: repeat(var(--dice-columns), calc((var(--dice-size) + var(--dice-gap)) / 2));
+	grid-auto-rows: calc(var(--dice-size) + var(--dice-gap));
 	justify-content: center;
 	align-items: center;
 	align-content: center;
+}
+
+#dices:has(> .face:nth-child(2):not(:empty)) {
+	--dice-columns: 4;
+}
+
+#dices:has(> .face:nth-child(3):not(:empty)) {
+	--dice-columns: 4;
+}
+
+#dices:has(> .face:nth-child(3):not(:empty)):has(> .face:nth-child(4):empty) > .face:nth-child(3) {
+	grid-column: 2 / span 2;
+}
+
+#dices:has(> .face:nth-child(4):not(:empty)) {
+	--dice-columns: 4;
+	--dice-size: 25vmin;
+}
+
+#dices:has(> .face:nth-child(5):not(:empty)) {
+	--dice-columns: 6;
+	--dice-size: min(25vmin, calc(100vw / 3 - var(--dice-gap)));
+}
+
+#dices:has(> .face:nth-child(5):not(:empty)):has(> .face:nth-child(6):empty) > .face:nth-child(4) {
+	grid-column: 2 / span 2;
 }
 
 .face {
@@ -67,11 +98,12 @@ DICE
 		"e g f"
 		"d . b";
 
-	flex: 0 0 auto;
-	margin: 6vmin;
-	padding: 2vmin;
-	width: 25vmin;
-	height: 25vmin;
+	grid-column: span 2;
+	justify-self: center;
+	margin: 0;
+	padding: calc(var(--dice-size) * 0.08);
+	width: var(--dice-size);
+	height: var(--dice-size);
 
 	background-color: var(--dice-color);
 	border-radius: 10%;
@@ -191,8 +223,8 @@ DICE TYPE
 	justify-self: center;
 	align-self: center;
 	grid-area: g;
-	font-size: 15vmin;
-	line-height: 15vmin;
+	font-size: calc(var(--dice-size) * 0.6);
+	line-height: 1;
 	font-weight: 400;
 	color: var(--pips-color);
 	text-align: center;
@@ -202,7 +234,7 @@ DICE TYPE
 	grid-area: g;
 	align-self: center;
 	justify-self: center;
-	font-size: 15vmin;
+	font-size: calc(var(--dice-size) * 0.6);
 	line-height: 1;
 	font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
 }
@@ -423,6 +455,48 @@ footer img:hover {
 MEDIA QUERIES
 -------------------------------------------------------------------
 */
+
+@media (max-aspect-ratio: 1/1) {
+	#dices:has(> .face:nth-child(6):not(:empty)) {
+		--dice-columns: 4;
+		--dice-size: min(25vmin, calc(100vh / 3 - var(--dice-gap)));
+	}
+}
+
+/* A full row needs 37vmin per die, including its spacing. */
+@media (min-aspect-ratio: 111/100) {
+	#dices:has(> .face:nth-child(3):not(:empty)):has(> .face:nth-child(4):empty) {
+		--dice-columns: 6;
+	}
+
+	#dices:has(> .face:nth-child(3):not(:empty)):has(> .face:nth-child(4):empty) > .face:nth-child(3) {
+		grid-column: span 2;
+	}
+}
+
+@media (min-aspect-ratio: 37/25) {
+	#dices:has(> .face:nth-child(4):not(:empty)):has(> .face:nth-child(5):empty) {
+		--dice-columns: 8;
+	}
+}
+
+@media (min-aspect-ratio: 37/20) {
+	#dices:has(> .face:nth-child(5):not(:empty)):has(> .face:nth-child(6):empty) {
+		--dice-columns: 10;
+		--dice-size: 25vmin;
+	}
+
+	#dices:has(> .face:nth-child(5):not(:empty)):has(> .face:nth-child(6):empty) > .face:nth-child(4) {
+		grid-column: span 2;
+	}
+}
+
+@media (min-aspect-ratio: 111/50) {
+	#dices:has(> .face:nth-child(6):not(:empty)) {
+		--dice-columns: 12;
+		--dice-size: 25vmin;
+	}
+}
 
 @media (prefers-color-scheme: dark) {
 	:root {

@@ -53,7 +53,7 @@ const longPressThreshold = 500; // Threshold to define long press
 const isTouchDevice = "ontouchstart" in window || navigator.maxTouchPoints;
 
 const USE_SERVICE_WORKER = true;
-const SERVICE_WORKER_VERSION = "2026-09-27-v6";
+const SERVICE_WORKER_VERSION = "2026-09-28-v1";
 const AUTO_RELOAD_ON_SW_UPDATE = true; // reload page once after an update
 
 /* --------------------------------------------------------------------------------------------------
