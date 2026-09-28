@@ -4,12 +4,23 @@ A simple dice roller web application that allows you to roll one or more dice wi
 
 ## Features
 
-- Roll a random number of dice (between 1 and 6)
-- Customize the number of sides on the dice (e.g., 6-sided, 20-sided)
-- Visual animation for dice rolling and shaking
+- Roll one or more standard dice
+- Supports D4, D6, D8, D10, D12 and D20
+- Special dice presets for games that use custom dice
+- Visual animation for rolling and shaking the dice
 - Long press to lock/unlock individual dice
-- Sidebar menu to control settings
 - Responsive UI for desktop and mobile
+- Offline support as a Progressive Web App
+
+## Special dice
+
+In addition to standard numeric dice, Dice Roller supports presets for games that use custom dice.
+
+Currently available:
+
+- **King of Tokyo** – six dice with numbers, hearts, energy and smash symbols
+
+Special dice are intended to replace the physical dice only. Dice Roller does not implement game rules, scoring or other game mechanics.
 
 ## Usage
 
