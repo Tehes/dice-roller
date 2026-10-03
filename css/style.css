@@ -498,9 +498,17 @@ MEDIA QUERIES
 */
 
 @media (max-aspect-ratio: 1/1) {
-	#dices:has(> .face:nth-child(6):not(:empty)) {
+	#dices:has(> .face:nth-child(5):not(:empty)) {
 		--dice-columns: 4;
 		--dice-rows: 3;
+	}
+
+	#dices:has(> .face:nth-child(5):not(:empty)):has(> .face:nth-child(6):empty) > .face:nth-child(4) {
+		grid-column: span 2;
+	}
+
+	#dices:has(> .face:nth-child(5):not(:empty)):has(> .face:nth-child(6):empty) > .face:nth-child(5) {
+		grid-column: 2 / span 2;
 	}
 }
 
