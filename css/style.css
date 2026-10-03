@@ -7,6 +7,14 @@
 	--tokyo-dice-color: hsl(0, 0%, 20%);
 	--tokyo-dice-locked-color: hsl(0, 0%, 30%);
 	--tokyo-symbol-color: hsl(85, 70%, 50%);
+	--qwixx-red-color: hsl(0, 75%, 60%);
+	--qwixx-red-locked-color: hsl(0, 75%, 53%);
+	--qwixx-yellow-color: hsl(45, 90%, 62%);
+	--qwixx-yellow-locked-color: hsl(45, 90%, 55%);
+	--qwixx-green-color: hsl(125, 35%, 52%);
+	--qwixx-green-locked-color: hsl(125, 35%, 45%);
+	--qwixx-blue-color: hsl(210, 75%, 60%);
+	--qwixx-blue-locked-color: hsl(210, 75%, 53%);
 	--shadow-color: rgba(0, 0, 0, 0.25);
 	--nav-bg-color: rgba(100, 100, 100, 0.45);
 	--neutral-white: #fff;
@@ -261,7 +269,28 @@ html:not(.symbols-ready) .material-symbols-outlined {
 	color: var(--tokyo-symbol-color);
 }
 
-#standardResult::before {
+#dices.qwixx .face:nth-child(3) {
+	--dice-color: var(--qwixx-red-color);
+	--dice-locked-color: var(--qwixx-red-locked-color);
+}
+
+#dices.qwixx .face:nth-child(4) {
+	--dice-color: var(--qwixx-yellow-color);
+	--dice-locked-color: var(--qwixx-yellow-locked-color);
+}
+
+#dices.qwixx .face:nth-child(5) {
+	--dice-color: var(--qwixx-green-color);
+	--dice-locked-color: var(--qwixx-green-locked-color);
+}
+
+#dices.qwixx .face:nth-child(6) {
+	--dice-color: var(--qwixx-blue-color);
+	--dice-locked-color: var(--qwixx-blue-locked-color);
+}
+
+#standardResult::before,
+#qwixxResults::before {
 	content: "Σ ";
 }
 
@@ -521,6 +550,14 @@ MEDIA QUERIES
 		--pips-locked-color: #333;
 		--tokyo-dice-color: hsl(0, 0%, 10%);
 		--tokyo-dice-locked-color: hsl(0, 0%, 20%);
+		--qwixx-red-color: hsl(0, 45%, 48%);
+		--qwixx-red-locked-color: hsl(0, 45%, 55%);
+		--qwixx-yellow-color: hsl(45, 55%, 52%);
+		--qwixx-yellow-locked-color: hsl(45, 55%, 59%);
+		--qwixx-green-color: hsl(125, 25%, 42%);
+		--qwixx-green-locked-color: hsl(125, 25%, 49%);
+		--qwixx-blue-color: hsl(210, 40%, 48%);
+		--qwixx-blue-locked-color: hsl(210, 40%, 55%);
 		--shadow-color: rgba(0, 0, 0, 0.4);
 		--nav-bg-color: rgba(85, 85, 85, 0.45);
 	}

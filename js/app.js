@@ -38,6 +38,7 @@ const tokyoPoints = document.querySelector("#tokyoPoints");
 const tokyoHearts = document.querySelector("#tokyoHearts");
 const tokyoEnergy = document.querySelector("#tokyoEnergy");
 const tokyoPaws = document.querySelector("#tokyoPaws");
+const qwixxResults = document.querySelector("#qwixxResults");
 const diceModes = {
     tokyo: {
         defaultDice: 6,
@@ -46,6 +47,12 @@ const diceModes = {
         renderFace: renderTokyoFace,
         updateSummary: updateTokyoSummary,
     },
+    qwixx: {
+        defaultDice: 6,
+        faces: [1, 2, 3, 4, 5, 6],
+        summary: qwixxResults,
+        updateSummary: updateQwixxSummary,
+    },
 };
 const longPressThreshold = 500; // Threshold to define long press
 // Detect if the device supports touch inputs
@@ -53,7 +60,7 @@ const longPressThreshold = 500; // Threshold to define long press
 const isTouchDevice = "ontouchstart" in window || navigator.maxTouchPoints;
 
 const USE_SERVICE_WORKER = true;
-const SERVICE_WORKER_VERSION = "2026-09-28-v2";
+const SERVICE_WORKER_VERSION = "2026-10-03-v1";
 const AUTO_RELOAD_ON_SW_UPDATE = true; // reload page once after an update
 
 /* --------------------------------------------------------------------------------------------------
@@ -78,6 +85,16 @@ function updateTokyoSummary() {
     tokyoHearts.textContent = counts.favorite;
     tokyoEnergy.textContent = counts.bolt;
     tokyoPaws.textContent = counts.pets;
+}
+
+function updateQwixxSummary() {
+    let sum = 0;
+    diceFaces.forEach((face, index) => {
+        if (index < 2 && face.dataset.value !== undefined) {
+            sum += Number(face.dataset.value);
+        }
+    });
+    qwixxResults.textContent = sum;
 }
 
 // Updates the result display for the selected dice type
@@ -149,7 +166,7 @@ function renderPips(die) {
     const randNum = getRndInteger(1, maxSides);
     die.dataset.value = mode ? mode.faces[randNum - 1] : randNum;
 
-    if (mode) {
+    if (mode?.renderFace) {
         mode.renderFace(die, die.dataset.value);
     } else if (maxSides === 6) {
         // Create the pips for a traditional 6-sided die

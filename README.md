@@ -19,6 +19,7 @@ In addition to standard numeric dice, Dice Roller supports presets for games tha
 Currently available:
 
 - **King of Tokyo** – six dice with numbers, hearts, energy and smash symbols
+- **Qwixx** – two white and four colored six-sided dice, with the sum of the white dice displayed
 
 Special dice are intended to replace the physical dice only. Dice Roller does not implement game rules, scoring or other game mechanics.
 
